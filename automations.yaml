@@ -1,0 +1,1010 @@
+- alias: "tv_master_netflix"
+  trigger:
+  - platform: state
+    entity_id: switch.tv_master
+    to: 'on'
+  action:
+  - delay: "00:00:08"
+  - service: scene.turn_on
+    target:
+      entity_id: scene.tv_master_netflix
+
+
+
+- alias: "tv_living_netflix"
+  trigger:
+  - platform: state
+    entity_id: switch.tv_living
+    to: 'on'
+  action:
+  - delay: "00:00:08"
+  - service: scene.turn_on
+    target:
+      entity_id: scene.tv_living_netflix
+
+- alias: "tv_detskaia_netflix"
+  trigger:
+  - platform: state
+    entity_id: switch.switch
+    to: 'on'
+  action:
+  - delay: "00:00:08"
+  - service: scene.turn_on
+    target:
+      entity_id: scene.tv_detskaia_netflix
+- alias: "podsvetka_gorderop_on"
+  trigger:
+  - platform: state
+    entity_id: switch.spoty_garderob
+    to: 'on'
+  action:
+  - service: switch.turn_on
+    entity_id: switch.podsvetka_garderobnoi
+    
+- alias: "podsvetka_gorderop_off"
+  trigger:
+  - platform: state
+    entity_id: switch.spoty_garderob
+    to: 'off'
+  action:
+  - service: switch.turn_off
+    entity_id: switch.podsvetka_garderobnoi   
+    
+# automation WC Master
+
+- alias: "mastervana_on"
+  trigger:
+  - platform: state
+    entity_id: 
+      - binary_sensor.0x00158d0006b7d27e_contact
+      - binary_sensor.0x00158d0009cded84_occupancy
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: switch.spoty_master_vana
+    state: 'off'
+  - condition: time
+    after: "07:00:00"
+    before: "23:00:00"
+  action:
+  - service: switch.turn_on
+    entity_id: switch.spoty_master_vana
+- alias: "mastervana_off"
+  trigger:
+  - platform: template
+    value_template: >
+      {{ is_state('binary_sensor.0x00158d0006b7d27e_contact', 'off') and
+         is_state('binary_sensor.0x00158d0009cded84_occupancy', 'off') }}
+    for:
+      minutes: 40     
+  condition:
+    - condition: state
+      entity_id: switch.spoty_master_vana
+      state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.spoty_master_vana
+      
+- alias: "mastervana_off2"
+  trigger:
+  - platform: template
+    value_template: >
+      {{ is_state('binary_sensor.0x00158d0006b7d27e_contact', 'on') and
+         is_state('binary_sensor.0x00158d0009cded84_occupancy', 'off') }}
+    for:
+      minutes: 40     
+  condition:
+    - condition: state
+      entity_id: switch.spoty_master_vana
+      state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.spoty_master_vana     
+    
+# automation WC Master led
+
+- alias: "mastervana_led_on"
+  trigger:
+  - platform: state
+    entity_id: 
+      - binary_sensor.0x00158d0006b7d27e_contact
+      - binary_sensor.0x00158d0009cded84_occupancy
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: light.podsvetka_master_vana
+    state: 'off'
+  - condition: time
+    after: "23:00:00"
+    before: "07:00:00"
+  action:
+  - service: light.turn_on
+    target:
+      entity_id: light.podsvetka_master_vana
+    data:
+      brightness_pct: 20
+      
+- alias: "mastervana_led_off"
+  trigger:
+  - platform: template
+    value_template: >
+      {{ is_state('binary_sensor.0x00158d0006b7d27e_contact', 'off') and
+         is_state('binary_sensor.0x00158d0009cded84_occupancy', 'off') }}
+    for:
+      minutes: 40     
+  condition:
+    - condition: state
+      entity_id: light.podsvetka_master_vana
+      state: 'on'
+  action:
+    - service: light.turn_off
+      entity_id: light.podsvetka_master_vana
+      
+- alias: "mastervana_led_off2"
+  trigger:
+  - platform: template
+    value_template: >
+      {{ is_state('binary_sensor.0x00158d0006b7d27e_contact', 'on') and
+         is_state('binary_sensor.0x00158d0009cded84_occupancy', 'off') }}
+    for:
+      minutes: 40     
+  condition:
+    - condition: state
+      entity_id: light.podsvetka_master_vana
+      state: 'on'
+  action:
+    - service: light.turn_off
+      entity_id: light.podsvetka_master_vana    
+    
+# automation wc 2et
+
+- alias: "vana_2et__on"
+  trigger:
+  - platform: state
+    entity_id: 
+      - binary_sensor.0x54ef441000db6de5_contact
+      - binary_sensor.0x00158d0009cdecda_occupancy
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: switch.spoty_vana_2et
+    state: 'off'
+  - condition: time
+    after: "07:00:00"
+    before: "23:00:00"
+  action:
+  - service: switch.turn_on
+    entity_id: switch.spoty_vana_2et
+
+- alias: "vana_2et_off"
+  trigger:
+  - platform: template
+    value_template: >
+      {{ is_state('binary_sensor.0x54ef441000db6de5_contact', 'off') and
+         is_state('binary_sensor.0x00158d0009cdecda_occupancy', 'off') }}
+    for:
+      minutes: 40     
+  condition:
+    - condition: state
+      entity_id: switch.spoty_vana_2et
+      state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.spoty_vana_2et
+      
+- alias: "vana_2et_off2"
+  trigger:
+  - platform: template
+    value_template: >
+      {{ is_state('binary_sensor.0x54ef441000db6de5_contact', 'on') and
+         is_state('binary_sensor.0x00158d0009cdecda_occupancy', 'off') }}
+    for:
+      minutes: 40     
+  condition:
+    - condition: state
+      entity_id: switch.spoty_vana_2et
+      state: 'on'
+  action:
+    - service: switch.turn_off
+      entity_id: switch.spoty_vana_2et 
+
+# automation Vana 2et led
+
+- alias: "vana2et_led_on"
+  trigger:
+  - platform: state
+    entity_id: 
+      - binary_sensor.0x54ef441000db6de5_contact
+      - binary_sensor.0x00158d0009cdecda_occupancy
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: light.podsvetka_tualet_2et
+    state: 'off'
+  - condition: time
+    after: "23:00:00"
+    before: "07:00:00"
+  action:
+  - service: light.turn_on
+    target:
+      entity_id: light.podsvetka_tualet_2et
+    data:
+      brightness_pct: 20
+    
+- alias: "vana2et_led_off"
+  trigger:
+  - platform: template
+    value_template: >
+      {{ is_state('binary_sensor.0x54ef441000db6de5_contact', 'off') and
+         is_state('binary_sensor.0x00158d0009cdecda_occupancy', 'off') }}
+    for:
+      minutes: 40     
+  condition:
+    - condition: state
+      entity_id: light.podsvetka_tualet_2et
+      state: 'on'
+  action:
+    - service: light.turn_off
+      entity_id: light.podsvetka_tualet_2et
+      
+- alias: "vana2et_led_off2"
+  trigger:
+  - platform: template
+    value_template: >
+      {{ is_state('binary_sensor.0x54ef441000db6de5_contact', 'on') and
+         is_state('binary_sensor.0x00158d0009cdecda_occupancy', 'off') }}
+    for:
+      minutes: 40     
+  condition:
+    - condition: state
+      entity_id: light.podsvetka_tualet_2et
+      state: 'on'
+  action:
+    - service: light.turn_off
+      entity_id: light.podsvetka_tualet_2et 
+    
+# automation garderob
+
+- alias: "mastergarderob_light_control"
+  trigger:
+    # Срабатывает только при включении (on)
+    - platform: state
+      entity_id:
+        - binary_sensor.0x54ef441000db6adf_contact
+        - binary_sensor.0x00158d0009cdeb2a_occupancy
+      to: "on"
+  action:
+    - choose:
+        # ✅ ВКЛЮЧЕНИЕ: движение или дверь открыта
+        - conditions:
+            - condition: or
+              conditions:
+                - condition: state
+                  entity_id: binary_sensor.0x00158d0009cdeb2a_occupancy
+                  state: "on"
+                - condition: state
+                  entity_id: binary_sensor.0x54ef441000db6adf_contact
+                  state: "on"
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id: switch.spoty_garderob
+
+        # 🕓 ВЫКЛЮЧЕНИЕ 1: оба OFF в течение 20 минут
+        - conditions:
+            - condition: and
+              conditions:
+                - condition: state
+                  entity_id: binary_sensor.0x00158d0009cdeb2a_occupancy
+                  state: "off"
+                - condition: state
+                  entity_id: binary_sensor.0x54ef441000db6adf_contact
+                  state: "off"
+          sequence:
+            - delay: "00:20:00"
+            - condition: and
+              conditions:
+                - condition: state
+                  entity_id: binary_sensor.0x00158d0009cdeb2a_occupancy
+                  state: "off"
+                - condition: state
+                  entity_id: binary_sensor.0x54ef441000db6adf_contact
+                  state: "off"
+            - service: switch.turn_off
+              target:
+                entity_id: switch.spoty_garderob
+
+        # 🕓 ВЫКЛЮЧЕНИЕ 2: дверь открыта, движения нет 20 минут
+        - conditions:
+            - condition: and
+              conditions:
+                - condition: state
+                  entity_id: binary_sensor.0x54ef441000db6adf_contact
+                  state: "on"
+                - condition: state
+                  entity_id: binary_sensor.0x00158d0009cdeb2a_occupancy
+                  state: "off"
+          sequence:
+            - delay: "00:20:00"
+            - condition: and
+              conditions:
+                - condition: state
+                  entity_id: binary_sensor.0x54ef441000db6adf_contact
+                  state: "on"
+                - condition: state
+                  entity_id: binary_sensor.0x00158d0009cdeb2a_occupancy
+                  state: "off"
+            - service: switch.turn_off
+              target:
+                entity_id: switch.spoty_garderob
+
+  mode: restart
+
+    
+# automation coridor
+
+- alias: "coridor_on"
+  trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.0x00158d0001716509_contact
+      - binary_sensor.0x54ef441000db6de5_contact
+      - binary_sensor.0x54ef441000db6e1a_contact
+    to: 'on'
+  condition:
+    - condition: template
+      value_template: >
+        {{ is_state('binary_sensor.0x00158d0006d46b12_occupancy', 'off') and
+           is_state('binary_sensor.0x00158d0009cdeeba_occupancy', 'off') }}
+    - condition: time
+      after: "07:00:00"
+      before: "23:00:00"       
+    - condition: state
+      entity_id: switch.spoty_koridor_2et
+      state: 'off'
+  action:
+    - service: switch.turn_on
+      entity_id: switch.spoty_koridor_2et
+      
+- alias: "coridordacik2et_on"
+  trigger:
+  - platform: template
+    value_template: >
+      {{ is_state('binary_sensor.0x00158d0006d46b12_occupancy', 'on') or
+         is_state('binary_sensor.0x00158d0009cdeeba_occupancy', 'on') }}
+  condition:
+    - condition: state
+      entity_id: switch.spoty_koridor_2et
+      state: 'off'
+    - condition: time
+      after: "07:00:00"
+      before: "23:00:00"  
+  action:
+    - service: switch.turn_on
+      entity_id: switch.spoty_koridor_2et
+      
+- alias: "coridordacik2et_off"
+  trigger:
+  - platform: template
+    value_template: >
+      {{ is_state('binary_sensor.0x00158d0006d46b12_occupancy', 'off') and
+         is_state('binary_sensor.0x00158d0009cdeeba_occupancy', 'off') }}
+    for:
+        seconds: 30     
+  condition:
+    - condition: state
+      entity_id: switch.spoty_koridor_2et
+      state: 'on'
+    - condition: time
+      after: "07:00:00"
+      before: "23:00:00"  
+  action:
+    - service: switch.turn_off
+      entity_id: switch.spoty_koridor_2et  
+      
+# coridor led 2et
+
+- alias: "coridor_led_on"
+  trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.0x00158d0001716509_contact
+      - binary_sensor.0x54ef441000db6de5_contact
+      - binary_sensor.0x54ef441000db6e1a_contact
+    to: 'on'
+  condition:
+    - condition: template
+      value_template: >
+        {{ is_state('binary_sensor.0x00158d0006d46b12_occupancy', 'off') and
+           is_state('binary_sensor.0x00158d0009cdeeba_occupancy', 'off') }}
+    - condition: time
+      after: "23:00:00"
+      before: "07:00:00"       
+    - condition: state
+      entity_id: light.podsvetka_koridor_2et
+      state: 'off'
+  action:
+    - service: light.turn_on
+      target:
+        entity_id: light.podsvetka_koridor_2et
+      data:
+        brightness_pct: 12
+    - service: light.turn_on
+      target:
+        entity_id: light.bra_koridor_2et
+      data:
+        brightness_pct: 5    
+
+- alias: "coridordacik2et_led_on"
+  trigger:
+    - platform: template
+      value_template: >
+        {{ is_state('binary_sensor.0x00158d0006d46b12_occupancy', 'on') or 
+           is_state('binary_sensor.0x00158d0009cdeeba_occupancy', 'on') }}
+  condition:
+    - condition: state
+      entity_id: light.podsvetka_koridor_2et
+      state: 'off'
+    - condition: time
+      after: "23:00:00"
+      before: "07:00:00"  
+  action:
+    - service: light.turn_on
+      target:
+        entity_id: light.podsvetka_koridor_2et
+      data:
+        brightness_pct: 12
+    - service: light.turn_on
+      target:
+        entity_id: light.bra_koridor_2et
+      data:
+        brightness_pct: 5     
+        
+- alias: "coridordacik2et_led_off"
+  trigger:
+    - platform: template
+      value_template: >
+        {{ is_state('binary_sensor.0x00158d0006d46b12_occupancy', 'off') and 
+           is_state('binary_sensor.0x00158d0009cdeeba_occupancy', 'off') }}
+      for:
+        seconds: 30
+  condition:
+    - condition: state
+      entity_id: light.podsvetka_koridor_2et
+      state: 'on'
+    - condition: state
+      entity_id: light.bra_koridor_2et
+      state: 'on'  
+    - condition: time
+      after: "23:00:00"
+      before: "07:00:00"  
+  action:
+    - service: light.turn_off
+      target:
+        entity_id: 
+          - light.podsvetka_koridor_2et
+          - light.bra_koridor_2et
+        
+# vhod
+
+- alias: "vhod_dveri_on"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x54ef441000db6afa_contact
+      to: "on"
+  condition:
+    - condition: state
+      entity_id: binary_sensor.0x00158d0009ce3d31_occupancy
+      state: "off"
+    - condition: state
+      entity_id: switch.spoty_v_prikhozhei
+      state: "off"
+    - condition: sun
+      after: sunset  
+  action:
+    - service: switch.turn_on
+      target:
+        entity_id: switch.spoty_v_prikhozhei
+        
+- alias: "vhod_dveri_off"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x54ef441000db6afa_contact
+      to: "off"
+      for:
+        minutes: 05
+  condition:
+    - condition: state
+      entity_id: binary_sensor.0x00158d0009ce3d31_occupancy
+      state: "off"
+    - condition: state
+      entity_id: switch.spoty_v_prikhozhei
+      state: "on"
+    - condition: sun
+      after: sunset  
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.spoty_v_prikhozhei        
+        
+# koridor 1 etaj  
+
+- alias: "koridor_on"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d0009ce3d31_occupancy
+      to: "on"
+  condition:
+    - condition: state
+      entity_id: switch.trek_shina_koridor_1et
+      state: "off"
+    - condition: time
+      before: "23:00:00"
+    - condition: sun
+      after: sunset  
+  action:
+    - service: switch.turn_on
+      target:
+        entity_id: switch.trek_shina_koridor_1et
+        
+- alias: "koridor_off"
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.0x00158d0009ce3d31_occupancy
+      to: "off"
+      for:
+        minutes: 02
+  condition:
+    - condition: state
+      entity_id: switch.trek_shina_koridor_1et
+      state: "on"
+    - condition: time
+      before: "23:00:00"
+    - condition: sun
+      after: sunset  
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.trek_shina_koridor_1et  
+        
+# Led kuhnea night
+
+- alias: "kuhnea_led_on"
+  trigger:
+    - platform: template
+      value_template: >
+        {{ is_state('binary_sensor.0x00158d0009ce3d31_occupancy', 'on') or 
+           is_state('binary_sensor.0x00158d0009cded56_occupancy', 'on') }}
+  condition:
+    - condition: state
+      entity_id: light.podsvetka_kukhnia
+      state: 'off'
+    - condition: time
+      after: "23:00:00"
+      before: "07:00:00"  
+  action:
+    - service: light.turn_on
+      target:
+        entity_id: light.podsvetka_kukhnia
+      data:
+        brightness_pct: 12
+    - service: light.turn_on
+      target:
+        entity_id: light.bra_koridor_1et
+      data:
+        brightness_pct: 5     
+        
+- alias: "kuhnea_led_off"
+  trigger:
+    - platform: template
+      value_template: >
+        {{ is_state('binary_sensor.0x00158d0009ce3d31_occupancy', 'off') and 
+           is_state('binary_sensor.0x00158d0009cded56_occupancy', 'off') }}
+      for:
+        seconds: 30
+  condition:
+    - condition: state
+      entity_id: light.podsvetka_kukhnia
+      state: 'on'
+    - condition: time
+      after: "23:00:00"
+      before: "07:00:00"  
+  action:
+    - service: light.turn_off
+      target:
+        entity_id: 
+          - light.podsvetka_kukhnia
+          - light.bra_koridor_1et
+          
+# Story Master L
+- alias: "masterl_left"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.masterl_left
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008302489_l1
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d0008302489_l2
+    - service: switch.turn_on
+      target:
+        entity_id: switch.shutter_toggle_4
+        
+- alias: "masterl_stop"
+  trigger:
+    - platform: state
+      entity_id: switch.master_shtory_l
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008302489_l2
+
+- alias: "masterl_right"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.masterl_right
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008302489_l2
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d0008302489_l1
+    - service: switch.turn_off
+      target:
+        entity_id: switch.master_shtory_l
+        
+- alias: "masterl2_stop"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.masterl_right
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008302489_l1        
+
+# Story Master R
+- alias: "masterr_left"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.masterr_left
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0007e562c7_l1
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d0007e562c7_l2
+    - service: switch.turn_on
+      target:
+        entity_id: switch.master_shtory_p  
+        
+- alias: "masterr_stop"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.masterr_left
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0007e562c7_l2        
+        
+- alias: "masterr_right"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.masterr_right
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0007e562c7_l2
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d0007e562c7_l1
+    - service: switch.turn_off
+      target:
+        entity_id: switch.master_shtory_p    
+        
+- alias: "masterr2_stop"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.masterr_right
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0007e562c7_l1
+        
+# Master shtori living
+
+- alias: "masterliving_left"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.master_living_left
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d00065a07c8_l1
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d00065a07c8_l2
+    - service: switch.turn_on
+      target:
+        entity_id: switch.master_shtory_living 
+        
+- alias: "masterr_stop"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.master_living_left
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d00065a07c8_l2
+        
+- alias: "masterliving_right"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.master_living_right
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d00065a07c8_l2
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d00065a07c8_l1
+    - service: switch.turn_off
+      target:
+        entity_id: switch.master_shtory_living 
+        
+- alias: "masterr_stop"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.master_living_right
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d00065a07c8_l1 
+        
+#shtori living
+
+- alias: "tiuli_left"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.tiuli_left
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008836dce_l1
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d0008836dce_l2
+    - service: switch.turn_on
+      target:
+        entity_id: switch.tiul_living_switch
+        
+- alias: "tiuli_left_stop"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.tiuli_left
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008836dce_l2
+        
+- alias: "tiuli_right"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.tiuli_right
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008836dce_l2
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d0008836dce_l1
+    - service: switch.turn_off
+      target:
+        entity_id: switch.tiul_living_switch
+        
+- alias: "tiuli_right_stop"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.tiuli_right
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008836dce_l1
+        
+- alias: "living_left"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.shtori_living_left
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0007ef56a3_l1
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d0007ef56a3_l2
+    - service: switch.turn_on
+      target:
+        entity_id: switch.shtory_living
+        
+- alias: "living_left_stop"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.shtori_living_left
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0007ef56a3_l2
+        
+- alias: "living_right"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.shtori_living_right
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0007ef56a3_l2
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d0007ef56a3_l1
+    - service: switch.turn_off
+      target:
+        entity_id: switch.shtory_living
+        
+- alias: "living_right_stop"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.shtori_living_right
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0007ef56a3_l1
+        
+#shtora kuhnea
+
+- alias: "kuhnea_left"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.kuhnea_left
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008304ef3_l1
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d0008304ef3_l2
+    - service: switch.turn_on
+      target:
+        entity_id: switch.shtory_kukhnia
+        
+- alias: "kuhnea_left_stop"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.kuhnea_left
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008304ef3_l2
+        
+- alias: "kuhnea_right"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.kuhnea_right
+      to: "on"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008304ef3_l2
+    - delay: "00:00:0.5"
+    - service: switch.turn_on
+      target:
+        entity_id: switch.0x00158d0008304ef3_l1
+    - service: switch.turn_off
+      target:
+        entity_id: switch.shtory_kukhnia
+        
+- alias: "kuhnea_right_stop"
+  trigger:
+    - platform: state
+      entity_id: input_boolean.kuhnea_right
+      to: "off"
+  action:
+    - service: switch.turn_off
+      target:
+        entity_id: switch.0x00158d0008304ef3_l1
+        
+# Ulicinoe osvishenie
+
+- alias: "Уличное освещение"
+  initial_state: true
+  trigger:
+    - platform: sun
+      event: sunset
+      offset: "+00:05:00"
+      id: "sunset"
+    - platform: sun
+      event: sunrise
+      id: "sunrise"
+    - platform: time
+      at: "01:53:00"
+      id: "night_off"
+    - platform: time
+      at: "06:30:00"
+      id: "morning_on"
+
+  action:
+    - choose:
+        - conditions:
+            - condition: or
+              conditions:
+                - condition: trigger
+                  id: "sunset"
+                - condition: trigger  
+                  id: "morning_on"
+          sequence:
+            - service: switch.turn_on
+              target:
+                entity_id:
+                  - switch.podsvetka_vorot
+                  - switch.podsvetka_klumby
+            - service: light.turn_on
+              target:
+                entity_id: light.podsvetka_perednii_dvor
+              data:
+                brightness_pct: 30
+
+        - conditions:
+            - condition: or
+              conditions:
+                - condition: trigger
+                  id: "sunrise"
+                - condition: trigger
+                  id: "night_off"
+          sequence:
+            - service: switch.turn_off
+              target:
+                entity_id:
+                  - switch.podsvetka_vorot
+                  - switch.podsvetka_klumby
+            - service: light.turn_off
+              target:
+                entity_id: light.podsvetka_perednii_dvor
+  mode: single
+  
+
+
