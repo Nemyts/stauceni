@@ -1,0 +1,786 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+sensor: !include_dir_merge_list sensor
+
+wake_on_lan:
+switch:
+  - platform: wake_on_lan
+    mac: 58:96:0A:4C:1B:3F
+    name: "tv_living"
+    turn_off:
+      service: media_player.turn_off
+      target:
+        entity_id: media_player.lg_webos_tv_oled77g45lw_dpiqljp
+        
+
+  - platform: wake_on_lan
+    mac: 58:96:0A:9E:E9:99
+    name: "tv_detskaia"
+    turn_off:
+      service: media_player.turn_off
+      target:
+        entity_id: media_player.lg_webos_tv_oled48c44la_dpiqljp
+        
+  - platform: wake_on_lan
+    mac: 58:96:0A:46:87:CC
+    name: "tv_master"
+    turn_off:
+      service: media_player.turn_off
+      target:
+        entity_id: media_player.lg_webos_tv_oled55c44la_dpiqljp        
+        
+
+template:
+  - switch:
+      - name: "Тюль ливинг switch"
+        turn_on:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d0008836dce_l1
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d0008836dce_l2
+        turn_off:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d0008836dce_l2
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d0008836dce_l1
+
+      - name: "Шторы ливинг"
+        turn_on:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d0007ef56a3_l1
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d0007ef56a3_l2
+        turn_off:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d0007ef56a3_l2
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d0007ef56a3_l1
+
+      - name: "Шторы кухня"
+        turn_on:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d0008304ef3_l1
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d0008304ef3_l2
+        turn_off:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d0008304ef3_l2
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d0008304ef3_l1
+
+      - name: "Мастер шторы л"
+        turn_on:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d0008302489_l1
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d0008302489_l2
+        turn_off:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d0008302489_l2
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d0008302489_l1
+
+      - name: "Мастер шторы п"
+        turn_on:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d0007e562c7_l1
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d0007e562c7_l2
+        turn_off:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d0007e562c7_l2
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d0007e562c7_l1
+
+      - name: "Мастер шторы ливинг"
+        turn_on:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d00065a07c8_l1
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d00065a07c8_l2
+        turn_off:
+          - service: switch.turn_off
+            target:
+              entity_id: switch.0x00158d00065a07c8_l2
+          - delay: "00:00:0.5"
+          - service: switch.turn_on
+            target:
+              entity_id: switch.0x00158d00065a07c8_l1
+  - sensor:
+      - name: "day"
+        state: >
+          {{ ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][now().weekday()] }}
+      - name: "date"
+        state: >
+          {% set months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %}
+          {{ now().day | string + ' ' + months[now().month - 1] }}  
+
+     
+mqtt:
+  sensor:
+  switch:
+    - unique_id: wb-mcm8_23/Input_1
+      name: "wb-mcm8_23/Input_1"
+      state_topic: "/devices/wb-mcm8_23/controls/Input 1"
+      command_topic: "/devices/wb-mcm8_23/controls/Input 1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mcm8_23/Input_2
+      name: "wb-mcm8_23/Input_2"
+      state_topic: "/devices/wb-mcm8_23/controls/Input 2"
+      command_topic: "/devices/wb-mcm8_23/controls/Input 2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mcm8_23/Input_3
+      name: "wb-mcm8_23/Input_3"
+      state_topic: "/devices/wb-mcm8_23/controls/Input 3"
+      command_topic: "/devices/wb-mcm8_23/controls/Input 3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mcm8_23/Input_4
+      name: "wb-mcm8_23/Input_4"
+      state_topic: "/devices/wb-mcm8_23/controls/Input 4"
+      command_topic: "/devices/wb-mcm8_23/controls/Input 4/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mcm8_23/Input_5
+      name: "wb-mcm8_23/Input_5"
+      state_topic: "/devices/wb-mcm8_23/controls/Input 5"
+      command_topic: "/devices/wb-mcm8_23/controls/Input 5/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_158/Input_1
+      name: "wb-led_158/Input_1"
+      state_topic: "/devices/wb-led_158/controls/Input 1"
+      command_topic: "/devices/wb-led_158/controls/Input 1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_158/Input_3
+      name: "wb-led_158/Input_3"
+      state_topic: "/devices/wb-led_158/controls/Input 3"
+      command_topic: "/devices/wb-led_158/controls/Input 3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_148/Input_1
+      name: "wb-led_148/Input_1"
+      state_topic: "/devices/wb-led_148/controls/Input 1"
+      command_topic: "/devices/wb-led_148/controls/Input 1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_148/Input_2
+      name: "wb-led_148/Input_2"
+      state_topic: "/devices/wb-led_148/controls/Input 2"
+      command_topic: "/devices/wb-led_148/controls/Input 2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_141/Input_1
+      name: "wb-mr3_141/Input_1"
+      state_topic: "/devices/wb-mr3_141/controls/Input 1"
+      command_topic: "/devices/wb-mr3_141/controls/Input 1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_141/Input_2
+      name: "wb-mr3_141/Input_2"
+      state_topic: "/devices/wb-mr3_141/controls/Input 2"
+      command_topic: "/devices/wb-mr3_141/controls/Input 2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_141/Input_3
+      name: "wb-mr3_141/Input_3"
+      state_topic: "/devices/wb-mr3_141/controls/Input 3"
+      command_topic: "/devices/wb-mr3_141/controls/Input 3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_141/K1
+      name: "Трек шина гостиная"
+      state_topic: "/devices/wb-mr3_141/controls/K1"
+      command_topic: "/devices/wb-mr3_141/controls/K1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_141/K2
+      name: "Бра гостиная А"
+      state_topic: "/devices/wb-mr3_141/controls/K2"
+      command_topic: "/devices/wb-mr3_141/controls/K2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_141/K3
+      name: "Бра гостиная Б"
+      state_topic: "/devices/wb-mr3_141/controls/K3"
+      command_topic: "/devices/wb-mr3_141/controls/K3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/Input_1
+      name: "wb-mr6c_150/Input_1"
+      state_topic: "/devices/wb-mr6c_150/controls/Input 1"
+      command_topic: "/devices/wb-mr6c_150/controls/Input 1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/Input_2
+      name: "wb-mr6c_150/Input_2"
+      state_topic: "/devices/wb-mr6c_150/controls/Input 2"
+      command_topic: "/devices/wb-mr6c_150/controls/Input 2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/Input_3
+      name: "wb-mr6c_150/Input_3"
+      state_topic: "/devices/wb-mr6c_150/controls/Input 3"
+      command_topic: "/devices/wb-mr6c_150/controls/Input 3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/Input_4
+      name: "wb-mr6c_150/Input_4"
+      state_topic: "/devices/wb-mr6c_150/controls/Input 4"
+      command_topic: "/devices/wb-mr6c_150/controls/Input 4/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/Input_5
+      name: "wb-mr6c_150/Input_5"
+      state_topic: "/devices/wb-mr6c_150/controls/Input 5"
+      command_topic: "/devices/wb-mr6c_150/controls/Input 5/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/Input_6
+      name: "wb-mr6c_150/Input_6"
+      state_topic: "/devices/wb-mr6c_150/controls/Input 6"
+      command_topic: "/devices/wb-mr6c_150/controls/Input 6/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/K1
+      name: "Трек шина мастер спальня"
+      state_topic: "/devices/wb-mr6c_150/controls/K1"
+      command_topic: "/devices/wb-mr6c_150/controls/K1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/K2
+      name: "Бра мастер спальня"
+      state_topic: "/devices/wb-mr6c_150/controls/K2"
+      command_topic: "/devices/wb-mr6c_150/controls/K2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/K3
+      name: "Споты гардероб"
+      state_topic: "/devices/wb-mr6c_150/controls/K3"
+      command_topic: "/devices/wb-mr6c_150/controls/K3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/K4
+      name: "Споты мастер вана"
+      state_topic: "/devices/wb-mr6c_150/controls/K4"
+      command_topic: "/devices/wb-mr6c_150/controls/K4/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/K5
+      name: "Споты коридор 2эт."
+      state_topic: "/devices/wb-mr6c_150/controls/K5"
+      command_topic: "/devices/wb-mr6c_150/controls/K5/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_150/K6
+      name: "Подсветка гардеробной"
+      state_topic: "/devices/wb-mr6c_150/controls/K6"
+      command_topic: "/devices/wb-mr6c_150/controls/K6/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_12/Input_1
+      name: "wb-mr6c_12/Input_1"
+      state_topic: "/devices/wb-mr6c_12/controls/Input 1"
+      command_topic: "/devices/wb-mr6c_12/controls/Input 1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_12/Input_2
+      name: "wb-mr6c_12/Input_2"
+      state_topic: "/devices/wb-mr6c_12/controls/Input 2"
+      command_topic: "/devices/wb-mr6c_12/controls/Input 2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_12/Input_3
+      name: "wb-mr6c_12/Input_3"
+      state_topic: "/devices/wb-mr6c_12/controls/Input 3"
+      command_topic: "/devices/wb-mr6c_12/controls/Input 3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_12/K1
+      name: "Трек шина детская"
+      state_topic: "/devices/wb-mr6c_12/controls/K1"
+      command_topic: "/devices/wb-mr6c_12/controls/K1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_12/K2
+      name: "Бра детская Б"
+      state_topic: "/devices/wb-mr6c_12/controls/K2"
+      command_topic: "/devices/wb-mr6c_12/controls/K2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_12/K3
+      name: "Бра детская А"
+      state_topic: "/devices/wb-mr6c_12/controls/K3"
+      command_topic: "/devices/wb-mr6c_12/controls/K3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_12/K4
+      name: "Споты вана 2эт."
+      state_topic: "/devices/wb-mr6c_12/controls/K4"
+      command_topic: "/devices/wb-mr6c_12/controls/K4/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_12/K5
+      name: "Бра вана 2эт."
+      state_topic: "/devices/wb-mr6c_12/controls/K5"
+      command_topic: "/devices/wb-mr6c_12/controls/K5/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_161/Input_1
+      name: "wb-led_161/Input_1"
+      state_topic: "/devices/wb-led_161/controls/Input 1"
+      command_topic: "/devices/wb-led_161/controls/Input 1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_105/Input_1
+      name: "wb-mr6c_65/K1"
+      state_topic: "/devices/wb-led_105/controls/Input 1"
+      command_topic: "/devices/wb-led_105/controls/Input 1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_198/Input_1
+      name: "wb-mr3_198/Input_1"
+      state_topic: "/devices/wb-mr3_198/controls/Input 1"
+      command_topic: "/devices/wb-mr3_198/controls/Input 1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_198/Input_2
+      name: "wb-mr3_198/Input_2"
+      state_topic: "/devices/wb-mr3_198/controls/Input 2"
+      command_topic: "/devices/wb-mr3_198/controls/Input 2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_198/Input_3
+      name: "wb-mr3_198/Input_3"
+      state_topic: "/devices/wb-mr3_198/controls/Input 3"
+      command_topic: "/devices/wb-mr3_198/controls/Input 3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_198/K1
+      name: "Споты в прихожей"
+      state_topic: "/devices/wb-mr3_198/controls/K1"
+      command_topic: "/devices/wb-mr3_198/controls/K1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_198/K2
+      name: "Трек шина коридор 1эт."
+      state_topic: "/devices/wb-mr3_198/controls/K2"
+      command_topic: "/devices/wb-mr3_198/controls/K2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr3_198/K3
+      name: "Туалет 1эт."
+      state_topic: "/devices/wb-mr3_198/controls/K3"
+      command_topic: "/devices/wb-mr3_198/controls/K3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_222/Input_1
+      name: "wb-mr6c_222/Input_1"
+      state_topic: "/devices/wb-mr6c_222/controls/Input 1"
+      command_topic: "/devices/wb-mr6c_222/controls/Input 1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_222/Input_2
+      name: "wb-mr6c_222/Input_2"
+      state_topic: "/devices/wb-mr6c_222/controls/Input 2"
+      command_topic: "/devices/wb-mr6c_222/controls/Input 2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_222/Input_3
+      name: "wb-mr6c_222/Input_3"
+      state_topic: "/devices/wb-mr6c_222/controls/Input 3"
+      command_topic: "/devices/wb-mr6c_222/controls/Input 3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_222/Input_4
+      name: "wb-mr6c_222/Input_4"
+      state_topic: "/devices/wb-mr6c_222/controls/Input 4"
+      command_topic: "/devices/wb-mr6c_222/controls/Input 4/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_222/Input_5
+      name: "wb-mr6c_222/Input_5"
+      state_topic: "/devices/wb-mr6c_222/controls/Input 5"
+      command_topic: "/devices/wb-mr6c_222/controls/Input 5/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_222/K1
+      name: "Остров"
+      state_topic: "/devices/wb-mr6c_222/controls/K1"
+      command_topic: "/devices/wb-mr6c_222/controls/K1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_222/K2
+      name: "Стол"
+      state_topic: "/devices/wb-mr6c_222/controls/K2"
+      command_topic: "/devices/wb-mr6c_222/controls/K2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_222/K3
+      name: "Трек шина кухня"
+      state_topic: "/devices/wb-mr6c_222/controls/K3"
+      command_topic: "/devices/wb-mr6c_222/controls/K3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_222/K4
+      name: "Котельная"
+      state_topic: "/devices/wb-mr6c_222/controls/K4"
+      command_topic: "/devices/wb-mr6c_222/controls/K4/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_222/K5
+      name: "Тераса"
+      state_topic: "/devices/wb-mr6c_222/controls/K5"
+      command_topic: "/devices/wb-mr6c_222/controls/K5/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_222/K6
+      name: "Подсветка фасада"
+      state_topic: "/devices/wb-mr6c_222/controls/K6"
+      command_topic: "/devices/wb-mr6c_222/controls/K6/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_228/Input_1
+      name: "wb-mr6c_228/Input_1"
+      state_topic: "/devices/wb-mr6c_228/controls/Input 1"
+      command_topic: "/devices/wb-mr6c_228/controls/Input 1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-mr6c_228/Input_2
+      name: "wb-mr6c_228/Input_2"
+      state_topic: "/devices/wb-mr6c_228/controls/Input 2"
+      command_topic: "/devices/wb-mr6c_228/controls/Input 2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-mr6c_228/Input_3
+      name: "wb-mr6c_228/Input_3"
+      state_topic: "/devices/wb-mr6c_228/controls/Input 3"
+      command_topic: "/devices/wb-mr6c_228/controls/Input 3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-mr6c_228/Input_4
+      name: "wb-mr6c_228/Input_4"
+      state_topic: "/devices/wb-mr6c_228/controls/Input 4"
+      command_topic: "/devices/wb-mr6c_228/controls/Input 4/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-mr6c_228/Input_5
+      name: "wb-mr6c_228/Input_5"
+      state_topic: "/devices/wb-mr6c_228/controls/Input 5"
+      command_topic: "/devices/wb-mr6c_228/controls/Input 5/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-mr6c_228/Input_6
+      name: "wb-mr6c_228/Input_6"
+      state_topic: "/devices/wb-mr6c_228/controls/Input 6"
+      command_topic: "/devices/wb-mr6c_228/controls/Input 6/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-mr6c_228/K1
+      name: "Трек шина ливинг Б"
+      state_topic: "/devices/wb-mr6c_228/controls/K1"
+      command_topic: "/devices/wb-mr6c_228/controls/K1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-mr6c_228/K2
+      name: "Трек шина ливинг А"
+      state_topic: "/devices/wb-mr6c_228/controls/K2"
+      command_topic: "/devices/wb-mr6c_228/controls/K2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true   
+    - unique_id: wb-mr6c_228/K3
+      name: "Люстра ливинг"
+      state_topic: "/devices/wb-mr6c_228/controls/K3"
+      command_topic: "/devices/wb-mr6c_228/controls/K3/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-mr6c_228/K4
+      name: "Подсветка забора"
+      state_topic: "/devices/wb-mr6c_228/controls/K4"
+      command_topic: "/devices/wb-mr6c_228/controls/K4/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_228/K5
+      name: "Подсветка ворот"
+      state_topic: "/devices/wb-mr6c_228/controls/K5"
+      command_topic: "/devices/wb-mr6c_228/controls/K5/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mr6c_228/K6
+      name: "Подсветка лестницы"
+      state_topic: "/devices/wb-mr6c_228/controls/K6"
+      command_topic: "/devices/wb-mr6c_228/controls/K6/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-gpio/EXT1_R3A1
+      name: "Подсветка клумбы"
+      state_topic: "/devices/wb-gpio/controls/EXT1_R3A1"
+      command_topic: "/devices/wb-gpio/controls/EXT1_R3A1/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-gpio/EXT1_R3A2
+      name: "Подсветка заднего забора"
+      state_topic: "/devices/wb-gpio/controls/EXT1_R3A2"
+      command_topic: "/devices/wb-gpio/controls/EXT1_R3A2/on"
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+  light:
+    - unique_id: wb-led_158/Channel_1
+      name: "Подсветка туалет 2эт."    
+      state_topic: "/devices/wb-led_158/controls/Channel 1"
+      command_topic: "/devices/wb-led_158/controls/Channel 1/on"
+      brightness_state_topic: '/devices/wb-led_158/controls/Channel 1 Brightness'
+      brightness_command_topic: '/devices/wb-led_158/controls/Channel 1 Brightness/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_158/Channel_2
+      name: "Подсветка детская"    
+      state_topic: "/devices/wb-led_158/controls/Channel 2"
+      command_topic: "/devices/wb-led_158/controls/Channel 2/on"
+      brightness_state_topic: '/devices/wb-led_158/controls/Channel 2 Brightness'
+      brightness_command_topic: '/devices/wb-led_158/controls/Channel 2 Brightness/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_158/Channels_3_4
+      name: "Подсветка гостинная"    
+      state_topic: "/devices/wb-led_158/controls/Channels 3_4"
+      command_topic: "/devices/wb-led_158/controls/Channels 3_4/on"
+      brightness_state_topic: '/devices/wb-led_158/controls/Channels 3_4 Brightness'
+      brightness_command_topic: '/devices/wb-led_158/controls/Channels 3_4 Brightness/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_148/Channels_1_2
+      name: "Подсветка мастер спальня"    
+      state_topic: "/devices/wb-led_148/controls/Channels 1_2"
+      command_topic: "/devices/wb-led_148/controls/Channels 1_2/on"
+      brightness_state_topic: '/devices/wb-led_148/controls/Channels 1_2 Brightness'
+      brightness_command_topic: '/devices/wb-led_148/controls/Channels 1_2 Brightness/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_148/Channels_3_4
+      name: "Подсветка шторы мастер спальня"    
+      state_topic: "/devices/wb-led_148/controls/Channels 3_4"
+      command_topic: "/devices/wb-led_148/controls/Channels 3_4/on"
+      brightness_state_topic: '/devices/wb-led_148/controls/Channels 3_4 Brightness'
+      brightness_command_topic: '/devices/wb-led_148/controls/Channels 3_4 Brightness/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_171/Channels_1_2
+      name: "Подсветка мастер вана"    
+      state_topic: "/devices/wb-led_171/controls/Channels 1_2"
+      command_topic: "/devices/wb-led_171/controls/Channels 1_2/on"
+      brightness_state_topic: '/devices/wb-led_171/controls/Channels 1_2 Brightness'
+      brightness_command_topic: '/devices/wb-led_171/controls/Channels 1_2 Brightness/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_171/Channels_3_4
+      name: "Подсветка коридор 2эт."    
+      state_topic: "/devices/wb-led_171/controls/Channels 3_4"
+      command_topic: "/devices/wb-led_171/controls/Channels 3_4/on"
+      brightness_state_topic: '/devices/wb-led_171/controls/Channels 3_4 Brightness'
+      brightness_command_topic: '/devices/wb-led_171/controls/Channels 3_4 Brightness/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-mdm3_139/K1
+      name: "Бра коридор 2ет"    
+      state_topic: "/devices/wb-mdm3_139/controls/K1"
+      command_topic: "/devices/wb-mdm3_139/controls/K1/on"
+      brightness_state_topic: '/devices/wb-mdm3_139/controls/Channel 1'
+      brightness_command_topic: '/devices/wb-mdm3_139/controls/Channel 1/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-mdm3_139/K2
+      name: "Бра коридор 1ет"    
+      state_topic: "/devices/wb-mdm3_139/controls/K2"
+      command_topic: "/devices/wb-mdm3_139/controls/K2/on"
+      brightness_state_topic: '/devices/wb-mdm3_139/controls/Channel 2'
+      brightness_command_topic: '/devices/wb-mdm3_139/controls/Channel 2/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-led_105/Channels_3_4
+      name: "Подсветка задний двор"    
+      state_topic: "/devices/wb-led_105/controls/Channels 3_4"
+      command_topic: "/devices/wb-led_105/controls/Channels 3_4/on"
+      brightness_state_topic: '/devices/wb-led_105/controls/Channels 3_4 Brightness'
+      brightness_command_topic: '/devices/wb-led_105/controls/Channels 3_4 Brightness/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true
+    - unique_id: wb-led_105/Channels_1_2
+      name: "Подсветка кухня"    
+      state_topic: "/devices/wb-led_105/controls/Channels 1_2"
+      command_topic: "/devices/wb-led_105/controls/Channels 1_2/on"
+      brightness_state_topic: '/devices/wb-led_105/controls/Channels 1_2 Brightness'
+      brightness_command_topic: '/devices/wb-led_105/controls/Channels 1_2 Brightness/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-led_161/Channels_1_2
+      name: "Подсветка ливинг"    
+      state_topic: "/devices/wb-led_161/controls/Channels 1_2"
+      command_topic: "/devices/wb-led_161/controls/Channels 1_2/on"
+      brightness_state_topic: '/devices/wb-led_161/controls/Channels 1_2 Brightness'
+      brightness_command_topic: '/devices/wb-led_161/controls/Channels 1_2 Brightness/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+    - unique_id: wb-led_161/Channels_3_4
+      name: "Подсветка передний двор"    
+      state_topic: "/devices/wb-led_161/controls/Channels 3_4"
+      command_topic: "/devices/wb-led_161/controls/Channels 3_4/on"
+      brightness_state_topic: '/devices/wb-led_161/controls/Channels 3_4 Brightness'
+      brightness_command_topic: '/devices/wb-led_161/controls/Channels 3_4 Brightness/on'
+      brightness_scale: 100
+      payload_on: "1"
+      payload_off: "0"
+      retain: true  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
